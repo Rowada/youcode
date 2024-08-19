@@ -51,8 +51,79 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  createdCourses Course[]
+  ownedCourses CourseOnUser[]
+  lessons LessonOnUser[]
 }
 
+
+model Course {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  image       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  creatorId   String
+
+  creator User @relation(fields: [creatorId], references: [id])
+  lessons Lesson[]
+  users   CourseOnUser[]
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  name        String
+  rank        String
+  content     String
+  createdAt   DateTime @default(now())
+  state       LessonState @default(HIDDEN)
+ 
+  course      Course   @relation(fields: [courseId], references: [id])
+  courseId    String
+  users       LessonOnUser[]
+}
+
+enum LessonState {
+  HIDDEN
+  PUBLISHED
+  PUBLIC
+}
+
+model LessonOnUser {
+  id          String   @id @default(cuid())
+  userId      String
+  lessonId    String
+  progress    Progress @default(NOT_STARTED)
+  createdAt   DateTime @default(now())
+
+ 
+ 
+  user        User     @relation(fields: [userId], references: [id])
+  lesson      Lesson   @relation(fields: [lessonId], references: [id])
+
+  @@unique([userId, lessonId])
+}
+
+enum Progress {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model CourseOnUser {
+  id          String   @id @default(cuid())
+  userId      String
+  courseId    String
+  createdAt   DateTime @default(now())
+  canceledAt  DateTime?
+ 
+ 
+  user        User     @relation(fields: [userId], references: [id])
+  course      Course   @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
 model VerificationToken {
   identifier String
   token      String   @unique
