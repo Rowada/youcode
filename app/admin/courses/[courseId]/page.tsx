@@ -19,6 +19,7 @@ import { Typography } from "@/components/ui/Typography";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import { PaginationButton } from "@/features/pagination/PaginationButton";
 
 export default async function CoursePage({
   params,
@@ -84,6 +85,11 @@ export default async function CoursePage({
               </Table>
 
               {/* pagination */}
+              <PaginationButton
+                baseUrl="/admin/courses/${course.id}"
+                currentPage={page}
+                totalPages={course._count?.users ?? 0 / 5}
+              />
             </CardContent>
           </Card>
 
