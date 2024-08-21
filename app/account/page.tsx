@@ -8,8 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import { AvatarFallback } from "@/components/ui/avatar";
+
+import { AvatarFallback, Avatar, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 

@@ -14,9 +14,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getRequiredAuthSession } from "@/lib/auth";
-import { gettCourse } from "./course.query";
+import { getCourse } from "./course.query";
 import { Typography } from "@/components/ui/Typography";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { PaginationButton } from "@/features/pagination/PaginationButton";
@@ -34,7 +34,7 @@ export default async function CoursePage({
 
   const session = await getRequiredAuthSession();
 
-  const course = await gettCourse({
+  const course = await getCourse({
     courseId: params.courseId,
     userId: session.user.id,
     userPage: page,
