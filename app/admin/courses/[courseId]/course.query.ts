@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-export const gettCourse = async ({
+export const getCourse = async ({
   courseId,
   userId,
   userPage,
