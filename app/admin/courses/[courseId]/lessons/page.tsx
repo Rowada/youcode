@@ -9,6 +9,7 @@ import { getLessons } from "./lessons.query";
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Typography } from "@/components/ui/Typography";
+import { LessonList } from "./LessonList";
 
 export default async function CourseLessonsPage({
   params,
@@ -38,7 +39,7 @@ export default async function CourseLessonsPage({
 
             <CardContent className="flex flex-col gap-2">
               {lessons.lessons.map((lesson) => (
-                <span>{lesson.name}</span>
+                <LessonList key={lesson.id} lesson={lesson} />
               ))}
             </CardContent>
           </Card>
