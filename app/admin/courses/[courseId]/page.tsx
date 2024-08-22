@@ -30,7 +30,7 @@ export default async function CoursePage({
   };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const page = Number(searchParams.page) || 1;
+  const page = Number(searchParams.page ?? 1);
 
   const session = await getRequiredAuthSession();
 
@@ -53,12 +53,14 @@ export default async function CoursePage({
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Name</TableHead>
+                  <TableRow>
+                    <TableHead>Image</TableHead>
+                    <TableHead>Name</TableHead>
+                  </TableRow>
                 </TableHeader>
                 <TableBody>
                   {course.users?.map((user) => (
-                    <TableRow>
+                    <TableRow key={user.id}>
                       <TableCell>
                         <Avatar className="rounded">
                           <AvatarFallback>{user.email?.[0]}</AvatarFallback>
@@ -84,7 +86,6 @@ export default async function CoursePage({
                 </TableBody>
               </Table>
 
-              {/* pagination */}
               <PaginationButton
                 baseUrl="/admin/courses/${course.id}"
                 currentPage={page}
