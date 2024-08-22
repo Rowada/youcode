@@ -9,6 +9,8 @@ export const getCourse = async ({
   userId: string;
   userPage: number;
 }) => {
+  const usersPerPage = 5;
+
   const courses = await prisma.course.findUnique({
     where: {
       creatorId: userId,
@@ -20,8 +22,8 @@ export const getCourse = async ({
       description: true,
       image: true,
       users: {
-        take: 5,
-        skip: Math.max(0, userPage * 5),
+        skip: (userPage - 1) * usersPerPage,
+        take: usersPerPage,
         select: {
           canceledAt: true,
           id: true,
