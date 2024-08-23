@@ -50,7 +50,7 @@ export default async function CourseLessonsPage({
             </CardContent>
 
             <CardFooter>
-              <Button variant={"outline"} className="w-full">
+              <Button variant={"secondary"} className="w-full">
                 Create lesson
               </Button>
             </CardFooter>
