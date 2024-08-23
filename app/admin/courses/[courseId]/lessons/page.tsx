@@ -7,9 +7,15 @@ import {
 import { getRequiredAuthSession } from "@/lib/auth";
 import { getLessons } from "./lessons.query";
 import { notFound } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Typography } from "@/components/ui/Typography";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { LessonList } from "./LessonList";
+import { Button } from "@/components/ui/button";
 
 export default async function CourseLessonsPage({
   params,
@@ -42,6 +48,12 @@ export default async function CourseLessonsPage({
                 <LessonList key={lesson.id} lesson={lesson} />
               ))}
             </CardContent>
+
+            <CardFooter>
+              <Button variant={"outline"} className="w-full">
+                Create lesson
+              </Button>
+            </CardFooter>
           </Card>
         </LayoutContent>
       </LayoutHeader>

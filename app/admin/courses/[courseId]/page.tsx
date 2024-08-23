@@ -14,14 +14,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getRequiredAuthSession } from "@/lib/auth";
-import { getCourse } from "./course.query";
+import { getAdminCourse } from "./course.query";
 import { Typography } from "@/components/ui/Typography";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { PaginationButton } from "@/features/pagination/PaginationButton";
 
-export default async function CoursePage({
+export default async function AdminCoursePage({
   params,
   searchParams,
 }: {
@@ -34,7 +34,7 @@ export default async function CoursePage({
 
   const session = await getRequiredAuthSession();
 
-  const course = await getCourse({
+  const course = await getAdminCourse({
     courseId: params.courseId,
     userId: session.user.id,
     userPage: page,
