@@ -1,5 +1,3 @@
-// crée une requête prisma pour récupérer les lessons d'un cours
-
 import { prisma } from "@/lib/prisma";
 
 export const getLessons = async ({
