@@ -1,13 +1,13 @@
 import Markdown from "react-markdown";
 
 export type MarkdownProseProps = {
-  children: string;
+  markdown: string;
 };
 
-export const MarkdownProse = ({ children }: MarkdownProseProps) => {
+export const MarkdownProse = (props: MarkdownProseProps) => {
   return (
     <Markdown className="prose dark:prose-invert lg:prose-lg">
-      {children}
+      {props.markdown}
     </Markdown>
   );
 };
