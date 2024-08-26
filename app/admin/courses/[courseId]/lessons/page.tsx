@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { LessonList } from "./LessonList";
+import { AdminLessonList } from "./AdminLessonList";
 import { Button } from "@/components/ui/button";
 
 export default async function CourseLessonsPage({
@@ -45,7 +45,7 @@ export default async function CourseLessonsPage({
 
             <CardContent className="flex flex-col gap-2">
               {lessons.lessons.map((lesson) => (
-                <LessonList key={lesson.id} lesson={lesson} />
+                <AdminLessonList key={lesson.id} lesson={lesson} />
               ))}
             </CardContent>
 

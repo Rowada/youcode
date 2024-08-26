@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getRequiredAuthSession } from "@/lib/auth";
-import { getAdminCourse } from "./course.query";
+import { getAdminCourse } from "./admin-course.query";
 import { Typography } from "@/components/ui/Typography";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";

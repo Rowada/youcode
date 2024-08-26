@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export const getLessons = async ({
   courseId,
@@ -7,7 +8,7 @@ export const getLessons = async ({
   courseId: string;
   userId: string;
 }) => {
-  const lessons = await prisma.course.findFirst({
+  return await prisma.course.findFirst({
     where: {
       id: courseId,
       creatorId: userId,
@@ -15,9 +16,21 @@ export const getLessons = async ({
     select: {
       id: true,
       name: true,
-      lessons: true,
+      lessons: {
+        orderBy: {
+          rank: "asc",
+        },
+        select: {
+          id: true,
+          name: true,
+          state: true,
+          courseId: true,
+        },
+      },
     },
   });
-
-  return lessons;
 };
+
+export type AdminLessonListType = NonNullable<
+  Prisma.PromiseReturnType<typeof getLessons>
+>["lessons"][number];
