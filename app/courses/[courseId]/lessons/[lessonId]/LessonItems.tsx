@@ -17,6 +17,15 @@ export const getLessonIcon = (status: CourseLessonItem["progress"]) => {
     default:
       return CircleDashed;
   }
+
+  // if (status === "COMPLETED") {
+  //   return CheckCircle;
+  // }
+
+  // if (status === "IN_PROGRESS") {
+  //   return Circle;
+  // }
+  // return CircleDashed;
 };
 
 export const LessonItem = ({ lesson }: LessonItemProps) => {
