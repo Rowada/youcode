@@ -30,11 +30,7 @@ export const BreadcrumbComponent = () => {
                 {isPrimaId(item) ? formId(item) : item}
               </Link>
             </BreadcrumbLink>
-            {index !== paths.length - 1 && (
-              <BreadcrumbSeparator>
-                <Slash />
-              </BreadcrumbSeparator>
-            )}
+            {index !== paths.length - 1 && <Slash size={16} />}
           </BreadcrumbItem>
         ))}
       </BreadcrumbList>
