@@ -37,7 +37,7 @@ export default async function CourseEditPage({
   return (
     <Layout>
       <LayoutHeader>
-        <LayoutTitle>Courses</LayoutTitle>
+        <LayoutTitle>Edit course</LayoutTitle>
         <LayoutContent>
           <Card className="flex-[2]">
             <CardContent className="mt-6">
