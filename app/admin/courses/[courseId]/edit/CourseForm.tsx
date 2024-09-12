@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { CourseFormSchema } from "./course.schema";
 import { useRouter } from "next/navigation";
-import { courseActionEdit } from "./course.action";
+import { courseActionCreate, courseActionEdit } from "./course.action";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -28,7 +28,11 @@ export type CourseFormProps = {
 export const CourseForm = ({ defaultValue }: CourseFormProps) => {
   const form = useZodForm({
     schema: CourseFormSchema,
-    defaultValues: defaultValue,
+    defaultValues: defaultValue || {
+      name: "",
+      description: "",
+      image: "",
+    },
   });
 
   const router = useRouter();
@@ -37,17 +41,14 @@ export const CourseForm = ({ defaultValue }: CourseFormProps) => {
     <Form
       form={form}
       onSubmit={async (values) => {
-        // console.log(values);
-
         if (defaultValue?.id) {
-          // console.log("update");
           const result = await courseActionEdit({
             courseId: defaultValue.id,
             data: values,
           });
 
           if (result?.data) {
-            toast.success(result.data);
+            toast.success(result.data.message);
             router.push(`/admin/courses/${defaultValue.id}`);
             router.refresh();
             return;
@@ -58,7 +59,19 @@ export const CourseForm = ({ defaultValue }: CourseFormProps) => {
           });
           return;
         } else {
-          // create course
+          const result = await courseActionCreate({
+            data: values,
+          });
+          if (result?.data) {
+            toast.success(result.data.message);
+            router.push(`/admin/courses/${result.data.course.id}`);
+            router.refresh();
+            return;
+          }
+
+          toast.error("Some error occured", {
+            description: result?.serverError,
+          });
         }
       }}
     >

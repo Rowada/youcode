@@ -13,7 +13,7 @@ const CourseActionEditProps = z.object({
 export const courseActionEdit = authenticatedAction
   .schema(CourseActionEditProps)
   .action(async ({ parsedInput, ctx }) => {
-    await prisma.course.update({
+    const course = await prisma.course.update({
       where: {
         id: parsedInput.courseId,
         creatorId: ctx.userId,
@@ -21,5 +21,32 @@ export const courseActionEdit = authenticatedAction
       data: parsedInput.data,
     });
 
-    return "Course updated successfully";
+    return {
+      message: "Course updated successfully",
+      course,
+    };
+  });
+
+const CourseActionCreateProps = z.object({
+  data: CourseFormSchema,
+});
+
+export const courseActionCreate = authenticatedAction
+  .schema(CourseActionCreateProps)
+  .action(async ({ parsedInput, ctx }) => {
+    if (!ctx.userId) {
+      throw new Error("User is not authenticated");
+    }
+
+    const course = await prisma.course.create({
+      data: {
+        ...parsedInput.data,
+        creatorId: ctx.userId,
+      },
+    });
+
+    return {
+      message: "Course created successfully",
+      course,
+    };
   });
