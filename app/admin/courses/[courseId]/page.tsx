@@ -1,9 +1,14 @@
+import { SubmitButton } from "@/components/form/SubmitButton";
 import {
   Layout,
   LayoutContent,
   LayoutHeader,
   LayoutTitle,
 } from "@/components/layout/Layout";
+import { Typography } from "@/components/ui/Typography";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -13,13 +18,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getRequiredAuthSession } from "@/lib/auth";
-import { getAdminCourse } from "./admin-course.query";
-import { Typography } from "@/components/ui/Typography";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
 import { PaginationButton } from "@/features/pagination/PaginationButton";
+import { getRequiredAuthSession } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { Ban, CircleCheckBig } from "lucide-react";
+import { revalidatePath } from "next/cache";
+import Link from "next/link";
+import { getAdminCourse } from "./admin-course.query";
 
 export default async function AdminCoursePage({
   params,
@@ -56,6 +61,9 @@ export default async function AdminCoursePage({
                   <TableRow>
                     <TableHead>Image</TableHead>
                     <TableHead>Name</TableHead>
+
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-end">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -80,6 +88,60 @@ export default async function AdminCoursePage({
                         >
                           {user.email}
                         </Typography>
+                      </TableCell>
+
+                      <TableCell>
+                        <Badge>{user.canceled ? "Canceled" : "Active"}</Badge>
+                      </TableCell>
+
+                      <TableCell>
+                        <form>
+                          <SubmitButton
+                            size="sm"
+                            variant="secondary"
+                            className="w-full"
+                            formAction={async () => {
+                              "use server";
+
+                              const session = await getRequiredAuthSession();
+
+                              const courseId = params.courseId;
+                              const userId = user.id;
+
+                              const courseOnUser =
+                                await prisma.courseOnUser.findFirst({
+                                  where: {
+                                    userId,
+                                    course: {
+                                      id: courseId,
+                                      creatorId: session?.user.id,
+                                    },
+                                  },
+                                });
+
+                              if (!courseOnUser) return;
+
+                              await prisma.courseOnUser.update({
+                                where: {
+                                  id: courseOnUser.id,
+                                },
+                                data: {
+                                  canceledAt: courseOnUser.canceledAt
+                                    ? null
+                                    : new Date(),
+                                },
+                              });
+
+                              revalidatePath(`/admin/courses/${courseId}`);
+                            }}
+                          >
+                            {user.canceled ? (
+                              <CircleCheckBig size={16} />
+                            ) : (
+                              <Ban size={16} />
+                            )}
+                          </SubmitButton>
+                        </form>
                       </TableCell>
                     </TableRow>
                   ))}
