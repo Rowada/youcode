@@ -1,34 +1,70 @@
 "use client";
 // InitializedMDXEditor.tsx
-import type { ForwardedRef } from "react";
 import {
+  BoldItalicUnderlineToggles,
+  ChangeCodeMirrorLanguage,
+  codeBlockPlugin,
+  codeMirrorPlugin,
+  ConditionalContents,
   headingsPlugin,
+  InsertCodeBlock,
   listsPlugin,
-  quotePlugin,
-  thematicBreakPlugin,
   markdownShortcutPlugin,
   MDXEditor,
-  type MDXEditorMethods,
+  quotePlugin,
+  ShowSandpackInfo,
+  thematicBreakPlugin,
+  toolbarPlugin,
+  UndoRedo,
   type MDXEditorProps,
 } from "@mdxeditor/editor";
 
-// Only import this to the next file
-export default function InitializedMDXEditor({
-  editorRef,
-  ...props
-}: { editorRef: ForwardedRef<MDXEditorMethods> | null } & MDXEditorProps) {
+import "@mdxeditor/editor/style.css";
+import styles from "./mdx-editor-theme.module.css";
+
+export default function InitializedMDXEditor({ ...props }: MDXEditorProps) {
   return (
     <MDXEditor
+      className={styles.theme}
+      contentEditableClassName="prose dark:prose-invert"
       plugins={[
-        // Example Plugin Usage
         headingsPlugin(),
         listsPlugin(),
         quotePlugin(),
+        codeBlockPlugin({ defaultCodeBlockLanguage: "js" }),
+        codeMirrorPlugin({
+          codeBlockLanguages: { js: "javascript", css: "CSS" },
+        }),
         thematicBreakPlugin(),
         markdownShortcutPlugin(),
+
+        toolbarPlugin({
+          toolbarContents: () => (
+            <ConditionalContents
+              options={[
+                {
+                  when: (editor) => editor?.editorType === "codeblock",
+                  contents: () => <ChangeCodeMirrorLanguage />,
+                },
+                {
+                  when: (editor) => editor?.editorType === "sandpack",
+                  contents: () => <ShowSandpackInfo />,
+                },
+                {
+                  fallback: () => (
+                    <>
+                      <UndoRedo />
+                      <BoldItalicUnderlineToggles />
+                      <InsertCodeBlock />
+                    </>
+                  ),
+                },
+              ]}
+            />
+          ),
+        }),
       ]}
       {...props}
-      ref={editorRef}
     />
   );
 }
