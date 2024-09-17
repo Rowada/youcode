@@ -7,7 +7,7 @@ export const getCourses = async (userId?: string, skip = 0, take = 10) => {
     take,
     where: userId
       ? {
-          users: { some: { userId } },
+          users: { some: { userId, canceledAt: null } },
         }
       : undefined,
     select: {

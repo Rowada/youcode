@@ -31,7 +31,7 @@ export default async function CoursePage({
       </LayoutHeader>
 
       <LayoutContent>
-        <Course course={course} />
+        <Course course={course} userId={session?.user.id} />
       </LayoutContent>
     </Layout>
   );
